@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>התספורת הגדולה</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(-45deg, #0d0d0d, #330000, #1a0000, #000000);
+      background-size: 400% 400%;
+      animation: fireBG 6s ease-in-out infinite;
+      color: #ffffff;
+      font-family: 'Arial Black', Gadget, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      direction: rtl;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @keyframes fireBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #ff3c00;
+      text-shadow: 0 0 20px #ff3c00, 0 0 40px #ff0000;
+      animation: pulse 1s infinite ease-in-out, flash 2s infinite alternate;
+      margin-bottom: 30px;
+      padding: 0 15px;
+    }
+
+    #countdown {
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: shake 0.3s infinite alternate ease-in-out;
+    }
+
+    .time-box {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 15px 20px;
+      border-radius: 10px;
+      border: 4px dashed #ff4444;
+      box-shadow: 0 0 30px #ff2222, 0 0 60px #ff0000;
+      min-width: 70px;
+      transform: scale(1);
+      animation: explode 1.5s infinite alternate;
+    }
+
+    .time-box span {
+      display: block;
+      font-size: 2.8em;
+      animation: glow 2s infinite alternate;
+    }
+
+    .label {
+      font-size: 0.6em;
+      margin-top: 5px;
+      color: #ffaaaa;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes flash {
+      0% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(-1px) rotate(-1deg); }
+      100% { transform: translateX(1px) rotate(1deg); }
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px #ff0000; }
+      100% { text-shadow: 0 0 30px #ff9900; }
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05) rotate(1deg); }
+    }
+
+    @keyframes screenBoom {
+      0% { background: #fff; opacity: 1; }
+      100% { background: #000; opacity: 0; }
+    }
+
+    #boom-effect {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: #fff;
+      z-index: 1000;
+      animation: screenBoom 1s ease forwards;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+      .time-box {
+        padding: 10px;
+        min-width: 60px;
+      }
+      .time-box span {
+        font-size: 1.8em;
+      }
+      .label {
+        font-size: 0.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="boom-effect"></div>
+  <h1>התספורת הגדולה בעוד..</h1>
+  <div id="countdown">
+    <div class="time-box">
+      <span id="days">00</span>
+      <span class="label">ימים</span>
+    </div>
+    <div class="time-box">
+      <span id="hours">00</span>
+      <span class="label">שעות</span>
+    </div>
+    <div class="time-box">
+      <span id="minutes">00</span>
+      <span class="label">דקות</span>
+    </div>
+    <div class="time-box">
+      <span id="seconds">00</span>
+      <span class="label">שניות</span>
+    </div>
+  </div>
+
+  <script>
+    const countdownDate = new Date("2025-05-16T10:00:00+03:00").getTime();
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+
+      if (distance <= 0) {
+        document.getElementById("countdown").innerHTML = "<h2 style='font-size: 3em;'>💈💥 בום! התספורת התחילה 💥💈</h2>";
+        const boom = document.getElementById("boom-effect");
+        boom.style.display = "block";
+        boom.style.animation = "screenBoom 1s ease forwards";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = days.toString().padStart(2, '0');
+      document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+      document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+      document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+    };
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
